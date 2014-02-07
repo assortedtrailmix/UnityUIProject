@@ -1,0 +1,13 @@
+﻿public enum UIAnchorType
+{
+    NONE,
+    CENTER,
+    TOPLEFT,
+    TOPCENTER,
+    TOPRIGHT,
+    MIDDLELEFT,
+    MIDDLERIGHT,
+    BOTTOMLEFT,
+    BOTTOMCENTER,
+    BOTTOMRIGHT,
+}
