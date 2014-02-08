@@ -1,71 +1,55 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UITest : MonoBehaviour
 {
-    private UIScreen testScreen;
-    private GameObject testGO;
-    private UIVerticalPanel verticalPanel;
-    public GameObject testGOA;
-    public Material testMat;
-    public Vector2 panelSize;
+    private UIScreen _testScreen;
+    private UIVerticalPanel _testVerticalPanel;
+    private List<UIQuad> _testQuads = new List<UIQuad>();
+    public Material TestMat;
+
+    public Vector2 VerticalPanelSize;
     void Awake()
     {
-        testGO = new GameObject("UI Test");
+        _testScreen = UIWidget.Create<UIScreen>("Test Screen");
 
-        testScreen = testGO.AddComponent<UIScreen>();
+        _testVerticalPanel = UIWidget.Create<UIVerticalPanel>("Test Panel", _testScreen);
 
-        verticalPanel = testGO.AddComponent<UIVerticalPanel>();
+        _testVerticalPanel.AnchorType = UIAnchorType.TOPRIGHT; //Anchor to top left side of parent (_testScreen)
+        _testVerticalPanel.CenterType = UICenterType.TOPRIGHT; //Set position based on top left corner
 
-        verticalPanel.Parent = testScreen;
-        verticalPanel.AnchorType = UIAnchorType.TOPLEFT;
-        verticalPanel.CenterType = UICenterType.TOPLEFT;
-        verticalPanel.RelativeSize = new Vector2(50, 50);
-        verticalPanel.RelativeMaxVerticalElementMargin = 20f;
+        _testVerticalPanel.RelativeSize = VerticalPanelSize; 
 
-
-        verticalPanel.DebugColor = Color.red;
-        verticalPanel.FixedSpacing = true;
-
-        UIQuad testWidgetA = testGO.AddComponent<UIQuad>();
-        testWidgetA.Material = testMat;
-        testWidgetA.CenterType = UICenterType.CENTER;
-        testWidgetA.ScaleMode = UIScaleMode.STRETCH;
-        testWidgetA.AspectRatio = 1f;
-
-        UIQuad testWidgetB = testGO.AddComponent<UIQuad>();
-        testWidgetB.Material = testMat;
-        testWidgetB.CenterType = UICenterType.CENTER;
-        testWidgetB.ScaleMode = UIScaleMode.STRETCH;
-        testWidgetB.AspectRatio = 1f;
-        testWidgetB.Weight = .8f;
-        UIQuad testWidgetC = testGO.AddComponent<UIQuad>();
-        testWidgetC.Material = testMat;
-        testWidgetC.CenterType = UICenterType.CENTER;
-        testWidgetC.ScaleMode = UIScaleMode.MAINTAIN_ASPECT_RATIO;
-        testWidgetC.AspectRatio = 1f;
-        testWidgetC.Weight = .3f;
-
-        UIPlaceholder testWidgetD = testGO.AddComponent<UIPlaceholder>();
-        verticalPanel.VerticalMargin = 1f;
-        verticalPanel.HorizontalMargin = 1f;
-        verticalPanel.AddChild(testWidgetA);
-        verticalPanel.AddChild(testWidgetB);
-        verticalPanel.AddChild(testWidgetC);
-        verticalPanel.AddChild(testWidgetD);
-        testWidgetC.RelativeSize = new Vector2(10f, 10f);
-
-        verticalPanel.RelativeSize = new Vector2(20, 20);
-
-        testGOA.transform.position = testScreen.Bounds.TopLeft;
-        oldPanelSize = panelSize;
+        _testVerticalPanel.FixedSpacing = true; //Each element takes up the same amount of space
+        _testVerticalPanel.RelativeMaxVerticalElementMargin = 10f; //10% of the panel is used as margins for the elements
+        AddTestQuad(3);
     }
 
-    private Vector2 oldPanelSize;
-    void Update()
+    void AddTestQuad(int num = 1)
     {
-        if (oldPanelSize == panelSize)
-            return;
-        verticalPanel.RelativeSize = panelSize;
-        oldPanelSize = panelSize;
+        for (int i = 0; i < num; i++)
+        {
+            UIQuad newQuad = UIWidget.Create<UIQuad>(string.Format("Test Quad {0}", _testQuads.Count),
+                _testVerticalPanel);
+
+            newQuad.Material = TestMat;
+            _testQuads.Add(newQuad);
+        }
+    }
+    void OnGUI()
+    {
+        Vector2 oldPanelSize = VerticalPanelSize;
+        GUILayout.Label("Panel Width");
+        VerticalPanelSize.x = GUILayout.HorizontalSlider(VerticalPanelSize.x, 0f, 100f, GUILayout.MinWidth(80));
+        GUILayout.Label("Panel Height");
+        VerticalPanelSize.y = GUILayout.HorizontalSlider(VerticalPanelSize.y, 0f, 100f, GUILayout.MinWidth(80));
+        if (GUILayout.Button("Add Test Quad"))
+        {
+            AddTestQuad();
+        }
+        if (oldPanelSize != VerticalPanelSize)
+        {
+            _testVerticalPanel.RelativeSize = VerticalPanelSize;
+        }
     }
 }

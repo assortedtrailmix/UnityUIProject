@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class UIScreen : UIPanel
 {
@@ -21,7 +21,7 @@ public class UIScreen : UIPanel
     public void InitCamera()
     {
         _cameraGameObject = new GameObject(string.Format("UICamera: {0}", transform.name), typeof(Camera));
-
+        
         _uiCamera = _cameraGameObject.GetComponent<Camera>();
         float aspectRatio = (float)Screen.width / Screen.height;
 
@@ -52,9 +52,9 @@ public class UIScreen : UIPanel
     }
 
 
-    public override void OnCreate()
+    public override void OnAwake()
     {
-        base.OnCreate();
+        base.OnAwake();
         AnchorType = UIAnchorType.NONE;
         CenterType = UICenterType.CENTER;
 

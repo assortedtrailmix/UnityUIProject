@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEngine;
 
 public class UIQuad : UIMesh
@@ -66,9 +65,9 @@ public class UIQuad : UIMesh
             SetDirty();
         }
     }
-    public override void OnCreate()
+    public override void OnAwake()
     {
-        base.OnCreate();
+        base.OnAwake();
         Mesh = MeshExtenstions.CreateQuadMesh(Size);
     }
 }

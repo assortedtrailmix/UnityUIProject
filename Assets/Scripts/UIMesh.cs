@@ -1,10 +1,7 @@
-﻿using System.Linq;
 using UnityEngine;
-using System.Collections;
 
 public class UIMesh : UIWidget
 {
-    public GameObject _meshGO;
     private Mesh b_mesh;
     public Mesh Mesh
     {
@@ -23,11 +20,11 @@ public class UIMesh : UIWidget
     {
         get
         {
-            return _meshRenderer.material;
+            return _meshRenderer.sharedMaterial;
         }
         set
         {
-            _meshRenderer.material = value;
+            _meshRenderer.sharedMaterial = value;
         }
     }
 
@@ -46,17 +43,15 @@ public class UIMesh : UIWidget
         }
     }
 
-    public override void OnCreate()
+    public override void OnAwake()
     {
-        _meshGO = new GameObject(string.Format("UIMesh{0}", gameObject.name), typeof(MeshRenderer), typeof(MeshFilter));
-        _meshFilter = _meshGO.GetComponent<MeshFilter>();
-        _meshRenderer = _meshGO.GetComponent<MeshRenderer>();
+        _meshFilter = gameObject.AddComponent<MeshFilter>();
+        _meshRenderer = gameObject.AddComponent<MeshRenderer>();
         OnDirty += () => PlaceMesh(Bounds);
     }
     protected virtual void PlaceMesh(UIRect bounds)
     {
-
-        _meshGO.transform.position = AnchorPoint;
+        gameObject.transform.position = AnchorPoint;
     }
     public void Start()
     {

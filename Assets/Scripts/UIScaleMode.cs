@@ -1,6 +1,3 @@
-﻿using UnityEngine;
-using System.Collections;
-
 public enum UIScaleMode
 {
     STRETCH = 0,

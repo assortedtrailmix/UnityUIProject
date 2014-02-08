@@ -1,20 +1,16 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEngine;
-
-public class UIVerticalPanel : UIPanel
+//TODO: Possibly make this class support both vertical, and horizontal panels
+public class UIVerticalPanel : UIPanel, ISqueezer
 {
-    public override bool CanSqueeze
-    {
-        get { return true; }
-    }
     private float? _relativeMaxVerticalElementMargin;
     private float _maxVerticalElementMargin;
     private float _verticalMargin;
     private float _horizontalMargin;
     public bool FixedSpacing { get; set; }
-    public override void OnCreate()
+    public override void OnAwake()
     {
-        base.OnCreate();
+        base.OnAwake();
         OnDirty += ValidateMargins;
     }
 
@@ -78,7 +74,7 @@ public class UIVerticalPanel : UIPanel
     {
         base.UpdateRelativeSizes();
         if (RelativeMaxVerticalElementMargin.HasValue)
-            MaxVerticalElementMargin = (RelativeMaxVerticalElementMargin.Value / 100f) * Bounds.Height;
+            MaxVerticalElementMargin = (RelativeMaxVerticalElementMargin.Value / 100f) * UseableHeight;
     }
     public override void OnAddChild(UIWidget child)
     {

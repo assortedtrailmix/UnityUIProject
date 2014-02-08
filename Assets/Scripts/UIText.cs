@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -76,7 +75,7 @@ public class UIText : UIWidget
         }
     }
 
-    public override void OnCreate()
+    public override void OnAwake()
     {
         _textMesh = gameObject.GetComponent<TextMesh>();
 

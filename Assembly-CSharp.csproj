@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Extentions.cs" />
+     <Compile Include="Assets\Scripts\ISqueezer.cs" />
      <Compile Include="Assets\Scripts\Mathfx.cs" />
      <Compile Include="Assets\Scripts\Resources\NewBehaviourScript.cs" />
      <Compile Include="Assets\Scripts\Resources\UIAnchorType.cs" />
