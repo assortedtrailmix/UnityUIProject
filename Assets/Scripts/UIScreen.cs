@@ -51,15 +51,15 @@ public class UIScreen : UIPanel
         Bounds = cameraBounds;
     }
 
-   
+
     public override void OnCreate()
     {
         base.OnCreate();
         AnchorType = UIAnchorType.NONE;
         CenterType = UICenterType.CENTER;
-        
+
         InitCamera();
         InitBounds();
     }
-    
+
 }

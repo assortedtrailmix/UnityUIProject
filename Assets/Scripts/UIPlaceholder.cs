@@ -1,4 +1,4 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UIPlaceholder : UIWidget {}
+public class UIPlaceholder : UIWidget { }

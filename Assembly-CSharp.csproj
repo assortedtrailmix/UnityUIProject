@@ -47,19 +47,17 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Extentions.cs" />
-     <Compile Include="Assets\Scripts\IAnchorable.cs" />
-     <Compile Include="Assets\Scripts\IPositionable.cs" />
-     <Compile Include="Assets\Scripts\ISqueezeable.cs" />
      <Compile Include="Assets\Scripts\Mathfx.cs" />
      <Compile Include="Assets\Scripts\Resources\NewBehaviourScript.cs" />
-     <Compile Include="Assets\Scripts\UIAnchorType.cs" />
-     <Compile Include="Assets\Scripts\UICenterType.cs" />
+     <Compile Include="Assets\Scripts\Resources\UIAnchorType.cs" />
+     <Compile Include="Assets\Scripts\Resources\UICenterType.cs" />
      <Compile Include="Assets\Scripts\UIFont.cs" />
-     <Compile Include="Assets\Scripts\UILoader.cs" />
+     <Compile Include="Assets\Scripts\UIMesh.cs" />
      <Compile Include="Assets\Scripts\UIPanel.cs" />
      <Compile Include="Assets\Scripts\UIPlaceholder.cs" />
      <Compile Include="Assets\Scripts\UIQuad.cs" />
      <Compile Include="Assets\Scripts\UIRect.cs" />
+     <Compile Include="Assets\Scripts\UIScaleMode.cs" />
      <Compile Include="Assets\Scripts\UIScreen.cs" />
      <Compile Include="Assets\Scripts\UITest.cs" />
      <Compile Include="Assets\Scripts\UIText.cs" />

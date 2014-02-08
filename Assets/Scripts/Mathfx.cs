@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
-public static class Mathfx {
+public static class Mathfx
+{
     public static Vector2 TopLeft(this Rect self)
     {
-        return new Vector2(self.xMin,self.yMin);
+        return new Vector2(self.xMin, self.yMin);
     }
     public static Vector2 TopCenter(this Rect self)
     {
@@ -38,9 +39,9 @@ public static class Mathfx {
     {
         return new Vector2(self.xMax, self.yMax);
     }
-    public static void GrowToFit(this Rect self,Rect otherRect)
+    public static void GrowToFit(this Rect self, Rect otherRect)
     {
-        if(otherRect.xMin < self.xMin)
+        if (otherRect.xMin < self.xMin)
         {
             self.xMin = otherRect.xMin;
         }

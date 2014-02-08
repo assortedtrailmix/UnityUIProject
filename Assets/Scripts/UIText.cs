@@ -1,10 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Linq;
+using UnityEngine;
 
 public class UIText : UIWidget
 {
     private TextMesh _textMesh;
     private MeshRenderer _textRenderer;
     private UIFont b_font;
+    private const int FitShrinkRate = 2;
+
     public UIFont Font
     {
         get
@@ -18,18 +23,63 @@ public class UIText : UIWidget
             _textRenderer.material = value.DefaultMaterial;
         }
     }
+
+    private string _idealText;
+    private UIRect _idealBounds;
+    public string Text
+    {
+        get
+        {
+            return _idealText;
+        }
+        set
+        {
+            _idealText = value;
+            SetDirty();
+        }
+    }
+
     public new UIRect Bounds
     {
         get
         {
-            return _textMesh ? new UIRect(_textMesh.renderer.bounds.Rect()) : new UIRect();
+            return _idealBounds;
+        }
+        set
+        {
+
+            _idealBounds = value;
+            string moddedText = _idealText;
+            var fitsBounds = new Func<bool>(() =>
+            {
+                _textMesh.text = moddedText;
+                return _textRenderer.bounds.size.x < _idealBounds.Width;
+            });
+            var availibleLineBreaks = new Func<int>(() => _idealText.Count(char.IsWhiteSpace));
+            transform.position = value.Position;
+
+            while (!fitsBounds.Invoke())
+            {
+
+                while (!fitsBounds.Invoke() && (availibleLineBreaks.Invoke() > 0))
+                {
+                    int indexOfLastWhitespace = Array.FindLastIndex(moddedText.ToCharArray(),
+                        char.IsWhiteSpace);
+                    moddedText = moddedText.Insert(indexOfLastWhitespace, Environment.NewLine);
+                }
+                if (fitsBounds.Invoke())
+                    break;
+                moddedText = _idealText;
+                _textMesh.characterSize -= FitShrinkRate;
+            }
+            _textMesh.text = moddedText;
         }
     }
 
     public override void OnCreate()
     {
         _textMesh = gameObject.GetComponent<TextMesh>();
-        
+
         if (!_textMesh)
         {
             _textMesh = gameObject.AddComponent<TextMesh>();
@@ -40,13 +90,10 @@ public class UIText : UIWidget
             _textRenderer = gameObject.AddComponent<MeshRenderer>();
         }
         _textMesh.fontSize = 95;
+        _textMesh.anchor = TextAnchor.UpperLeft;
+        OnDirty += () => { Bounds = _idealBounds; };
     }
 
-    public void SetText(string text)
-    {
-        _textMesh.text = text;
-        SetDirty();
-    }
 
 
     public override void OnDrawGizmos()

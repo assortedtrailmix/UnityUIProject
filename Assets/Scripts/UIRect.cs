@@ -7,7 +7,8 @@ using UnityEngine;
 
 public struct UIRect
 {
-    public UIRect(float x, float y, float width, float height, float z = 0) : this()
+    public UIRect(float x, float y, float width, float height, float z = 0)
+        : this()
     {
         XMin = x;
         YMin = y - height;
@@ -16,7 +17,8 @@ public struct UIRect
         Z = z;
     }
 
-    public UIRect(Rect sourceRect) : this()
+    public UIRect(Rect sourceRect)
+        : this()
     {
         XMin = sourceRect.xMin;
         YMin = sourceRect.yMin;
@@ -67,13 +69,13 @@ public struct UIRect
 
     public float Width
     {
-        get { return XMax - XMin; }
+        get { return Mathf.Abs(XMax - XMin); }
         set { XMax = XMin + value; }
     }
 
     public float Height
     {
-        get { return YMax - YMin; }
+        get { return Mathf.Abs(YMax - YMin); }
         set { YMax = YMin + value; }
     }
 
@@ -82,18 +84,19 @@ public struct UIRect
         get { return new Vector2(XMax, YMax); }
         set
         {
-            float xOffset = value.x - XMax;
+            float xOffset = value.x - XMin;
             float yOffset = value.y - YMax;
             Translate(xOffset, yOffset);
+
         }
     }
 
     public Vector2 TopCenter
     {
-        get { return new Vector2(XMin + (Width/2), YMax); }
+        get { return new Vector2(XMin + (Width / 2), YMax); }
         set
         {
-            float xOffset = (value.x - (Width/2)) - XMin;
+            float xOffset = (value.x - (Width / 2)) - XMin;
             float yOffset = value.y - YMax;
             Translate(xOffset, yOffset);
         }
@@ -104,7 +107,7 @@ public struct UIRect
         get { return new Vector2(XMin, YMax); }
         set
         {
-            float xOffset = value.x - XMin;
+            float xOffset = value.x - XMax;
             float yOffset = value.y - YMax;
             Translate(xOffset, yOffset);
         }
@@ -112,22 +115,23 @@ public struct UIRect
 
     public Vector2 MiddleLeft
     {
-        get { return new Vector2(XMax, YMin + (Height/2)); }
+        get { return new Vector2(XMax, YMin + (Height / 2)); }
         set
         {
-            float xOffset = value.x - XMax;
-            float yOffset = (value.y - (Height/2)) - YMin;
+
+            float xOffset = value.x - XMin;
+            float yOffset = (value.y - (Height / 2)) - YMin;
             Translate(xOffset, yOffset);
         }
     }
 
     public Vector2 MiddleCenter
     {
-        get { return new Vector2(XMin + (Width/2), YMin + (Height/2)); }
+        get { return new Vector2(XMin + (Width / 2), YMin + (Height / 2)); }
         set
         {
-            float xOffset = (value.x - (Width/2)) - XMin;
-            float yOffset = (value.y - (Height/2)) - YMin;
+            float xOffset = (value.x - (Width / 2)) - XMin;
+            float yOffset = (value.y - (Height / 2)) - YMin;
 
             Translate(xOffset, yOffset);
         }
@@ -141,11 +145,11 @@ public struct UIRect
 
     public Vector2 MiddleRight
     {
-        get { return new Vector2(XMin, YMin + (Height/2)); }
+        get { return new Vector2(XMin, YMin + (Height / 2)); }
         set
         {
-            float xOffset = value.x - XMin;
-            float yOffset = (value.y - (Height/2)) - YMin;
+            float xOffset = value.x - XMax;
+            float yOffset = (value.y - (Height / 2)) - YMin;
             Translate(xOffset, yOffset);
         }
     }
@@ -155,7 +159,7 @@ public struct UIRect
         get { return new Vector2(XMax, YMin); }
         set
         {
-            float xOffset = value.x - XMax;
+            float xOffset = value.x - XMin;
             float yOffset = value.y - YMin;
             Translate(xOffset, yOffset);
         }
@@ -163,10 +167,10 @@ public struct UIRect
 
     public Vector2 BottomCenter
     {
-        get { return new Vector2(XMin + (Width/2), YMin); }
+        get { return new Vector2(XMin + (Width / 2), YMin); }
         set
         {
-            float xOffset = (value.x - (Width/2)) - XMin;
+            float xOffset = (value.x - (Width / 2)) - XMin;
             float yOffset = value.y - YMin;
             Translate(xOffset, yOffset);
         }
@@ -177,7 +181,7 @@ public struct UIRect
         get { return new Vector2(XMin, YMin); }
         set
         {
-            float xOffset = value.x - XMin;
+            float xOffset = value.x - XMax;
             float yOffset = value.y - YMin;
             Translate(xOffset, yOffset);
         }
@@ -240,7 +244,7 @@ public struct UIRect
 
     public static UIRect RectFromMinMax(float xmin, float ymin, float xmax, float ymax, float z = 0)
     {
-        return new UIRect {XMin = xmin, YMin = ymin, XMax = xmax, YMax = ymax, Z = 0};
+        return new UIRect { XMin = xmin, YMin = ymin, XMax = xmax, YMax = ymax, Z = 0 };
     }
 
     public override string ToString()
@@ -269,14 +273,14 @@ public struct UIRect
         unchecked
         {
             var result = 13;
-            result = (result*397) ^ XMin.GetHashCode();
-            result = (result*397) ^ XMax.GetHashCode();
-            result = (result*397) ^ YMin.GetHashCode();
-            result = (result*397) ^ YMax.GetHashCode();
+            result = (result * 397) ^ XMin.GetHashCode();
+            result = (result * 397) ^ XMax.GetHashCode();
+            result = (result * 397) ^ YMin.GetHashCode();
+            result = (result * 397) ^ YMax.GetHashCode();
             return result;
         }
     }
-    
+
     public override bool Equals(object obj)
     {
         if (obj == null)
@@ -285,8 +289,7 @@ public struct UIRect
         }
 
         // If parameter cannot be cast to Point return false.
-        UIRect otherRect = obj is UIRect ? (UIRect) obj : new UIRect();
+        UIRect otherRect = obj is UIRect ? (UIRect)obj : new UIRect();
         return otherRect == this;
     }
 }
-    

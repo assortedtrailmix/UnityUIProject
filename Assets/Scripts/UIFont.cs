@@ -23,7 +23,7 @@ public class UIFont
     }
 
     public Font UnityFont { get; private set; }
-    public static UIFont GetFont(string fontName,string path = "")
+    public static UIFont GetFont(string fontName, string path = "")
     {
         UIFont returnFont = _loadedFonts.Where(font => font.Name == fontName).DefaultIfEmpty(null).FirstOrDefault();
         if (returnFont != null)
@@ -33,7 +33,7 @@ public class UIFont
 
         if (string.IsNullOrEmpty(path))
         {
-            throw new ArgumentException(string.Format("Font not found: {0}",fontName),"fontName");
+            throw new ArgumentException(string.Format("Font not found: {0}", fontName), "fontName");
         }
         else return LoadFont(fontName, path);
     }

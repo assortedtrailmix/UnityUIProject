@@ -9,13 +9,18 @@ using UnityEngine;
 
 public abstract class UIWidget : MonoBehaviour
 {
+    public virtual bool CanSqueeze
+    {
+        get { return false; }
+    }
+
     public delegate void OnDirtyHandler();
-    
+
     private UIAnchorType _anchorType;
     private UICenterType _centerType;
 
     private UIRect _bounds;
-    
+
     private bool _isDirty;
 
     private UIWidget _parent;
@@ -99,8 +104,18 @@ public abstract class UIWidget : MonoBehaviour
         set
         {
             UIRect newBounds = Bounds;
-            newBounds.SetDimensions(value);
+            newBounds.Dimensions = value;
             Bounds = newBounds;
+        }
+    }
+
+    public Vector2? RelativeSize
+    {
+        get { return _relativeSize; }
+        set
+        {
+            _relativeSize = value / 100f;
+            UpdateRelativeSizes();
         }
     }
 
@@ -147,7 +162,7 @@ public abstract class UIWidget : MonoBehaviour
         }
     }
 
-    public UIRect Bounds
+    public virtual UIRect Bounds
     {
         get { return _bounds; }
         set
@@ -161,7 +176,7 @@ public abstract class UIWidget : MonoBehaviour
     public float Weight { get; set; }
     public event OnDirtyHandler OnDirty = delegate { };
 
-   
+
 
 
     public virtual void UpdateAnchor()
@@ -208,12 +223,23 @@ public abstract class UIWidget : MonoBehaviour
         OnDirty += () =>
         {
             UpdateAnchor();
+            UpdateRelativeSizes();
             Debug.Log("Widget Recalced");
         };
         OnCreate();
     }
 
-    public virtual void OnCreate(){}
+    protected virtual void UpdateRelativeSizes()
+    {
+        if (RelativeSize.HasValue && Parent && !Parent.CanSqueeze)
+            Size = new Vector2
+            {
+                x = RelativeSize.Value.x * Parent.Size.x,
+                y = RelativeSize.Value.y * Parent.Size.y
+            };
+    }
+
+    public virtual void OnCreate() { }
 
     public void SetDirty()
     {
@@ -222,17 +248,19 @@ public abstract class UIWidget : MonoBehaviour
 
     public void Update()
     {
-        if (_isDirty)
-        {
-            OnDirty();
-            _isDirty = false;
-        }
         OnUpdate();
+        if (!_isDirty) return;
+
+        OnDirty();
+        _isDirty = false;
     }
 
-    public virtual void OnUpdate(){}
+    public virtual void OnUpdate() { }
     public Color DebugColor = Color.blue;
     public float DebugGizmoScale = .5f;
+    private Vector2? _relativeSize;
+    private bool _canSqueeze;
+
     public void DrawBounds()
     {
         Vector3 topLeft = new Vector3(Bounds.XMin, Bounds.YMax, Position.z);
@@ -254,7 +282,8 @@ public abstract class UIWidget : MonoBehaviour
     }
     /// <summary>
     /// Signals UIWidget to fit itself into a given bounding rect
-    /// It is up to each UIWidget to override this funtion if it requires a complex process to fit in the given rect
+    /// It is up to each UIWidget to override this funtion if it requires a complex process to fit in the given rect, 
+    /// but peferably, bounds should be overriden
     /// </summary>
     /// <param name="boundLimits"> The UIRect for the UIWidget to fit in </param>
     public virtual void Squeeze(UIRect boundLimits)

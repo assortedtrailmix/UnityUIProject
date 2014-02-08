@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 
-public abstract class UIPanel : UIWidget{
+public abstract class UIPanel : UIWidget
+{
     protected readonly List<UIWidget> Children = new List<UIWidget>();
+
+
 
     public override void OnCreate()
     {
@@ -15,8 +18,8 @@ public abstract class UIPanel : UIWidget{
         SetDirty();
     }
 
-    public virtual void OnAddChild(UIWidget child){}
-    public void RemoveChild(UIWidget child,bool nullParent = true)
+    public virtual void OnAddChild(UIWidget child) { }
+    public void RemoveChild(UIWidget child, bool nullParent = true)
     {
         if (nullParent)
             child.Parent = null;
@@ -24,6 +27,6 @@ public abstract class UIPanel : UIWidget{
         SetDirty();
     }
 
-    protected virtual void SpaceChildren(){}
+    protected virtual void SpaceChildren() { }
 
 }
